@@ -1,6 +1,6 @@
 import { addIngredient } from '../services/firestore/ingredients';
 import { collection, doc, setDoc } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from '../services/firebase';
 import type { Ingredient } from '../types/database';
 
 const INITIAL_INGREDIENTS: Omit<Ingredient, 'id'>[] = [

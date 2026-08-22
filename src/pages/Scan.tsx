@@ -72,17 +72,19 @@ export default function Scan() {
       const matchedIngredients: Ingredient[] = [];
       const unknownIngredients: string[] = [];
 
-      product.normalizedIngredients.forEach(input => {
-        const match = allIngredients.find(ing => 
-          ing.name.toLowerCase() === input.toLowerCase() || 
-          (ing.synonyms && ing.synonyms.map(s => s.toLowerCase()).includes(input.toLowerCase()))
-        );
-        if (match) {
-          matchedIngredients.push(match);
-        } else {
-          unknownIngredients.push(input);
-        }
-      });
+      if (product.normalizedIngredients) {
+        product.normalizedIngredients.forEach(input => {
+          const match = allIngredients.find(ing => 
+            ing.name.toLowerCase() === input.toLowerCase() || 
+            (ing.synonyms && ing.synonyms.map(s => s.toLowerCase()).includes(input.toLowerCase()))
+          );
+          if (match) {
+            matchedIngredients.push(match);
+          } else {
+            unknownIngredients.push(input);
+          }
+        });
+      }
 
       // 4. Rodar Motor
       const result = analyzeCompatibility(profile, matchedIngredients);
