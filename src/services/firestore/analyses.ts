@@ -1,4 +1,4 @@
-import { collection, addDoc, getDocs, query, where, orderBy } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where, orderBy, doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import type { AnalysisResult } from '../../types/database';
 
@@ -20,14 +20,13 @@ export async function getUserAnalyses(userId: string): Promise<AnalysisResult[]>
   );
   
   const querySnapshot = await getDocs(q);
-  return querySnapshot.docs.map(doc => ({
-    id: doc.id,
-    ...doc.data()
+  return querySnapshot.docs.map(d => ({
+    id: d.id,
+    ...d.data()
   }) as AnalysisResult);
 }
 
 export async function getAnalysis(id: string): Promise<AnalysisResult | null> {
-  const { doc, getDoc } = await import('firebase/firestore');
   const docRef = doc(db, COLLECTION_NAME, id);
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
