@@ -1,4 +1,4 @@
-import { collection, doc, setDoc, getDocs, updateDoc, query, orderBy } from 'firebase/firestore';
+import { collection, doc, setDoc, getDocs, updateDoc, query } from 'firebase/firestore';
 import { db } from '../firebase';
 import type { Product } from '../../types/database';
 
