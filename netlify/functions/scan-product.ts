@@ -91,11 +91,11 @@ const handler: Handler = async (event, context) => {
       })
     };
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Erro no OCR:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Falha ao processar a imagem' })
+      body: JSON.stringify({ error: `Falha no OCR: ${error.message}` })
     };
   }
 };
