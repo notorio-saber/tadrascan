@@ -11,6 +11,7 @@ import ProductsManager from './pages/admin/ProductsManager';
 
 import Analyze from './pages/Analyze';
 import AnalysisResult from './pages/AnalysisResult';
+import Scan from './pages/Scan';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/app" element={<Home />} />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/analyze" element={<Analyze />} />
+          <Route path="/scan" element={<Scan />} />
           <Route path="/result/:id" element={<AnalysisResult />} />
         </Route>
 
