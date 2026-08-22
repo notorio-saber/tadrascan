@@ -1,6 +1,6 @@
-import { collection, doc, setDoc, getDocs, getDoc, updateDoc, query, orderBy } from 'firebase/firestore';
+import { collection, doc, setDoc, getDocs, updateDoc, query, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
-import { Ingredient } from '../../types/database';
+import type { Ingredient } from '../../types/database';
 
 const COLLECTION_NAME = 'ingredients';
 

@@ -1,5 +1,5 @@
 import { addIngredient } from '../services/firestore/ingredients';
-import { Ingredient } from '../types/database';
+import type { Ingredient } from '../types/database';
 
 const INITIAL_INGREDIENTS: Omit<Ingredient, 'id'>[] = [
   {

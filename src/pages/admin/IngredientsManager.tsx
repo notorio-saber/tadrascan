@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Ingredient } from '../../../types/database';
-import { getIngredients } from '../../../services/firestore/ingredients';
-import { seedInitialIngredients } from '../../../utils/seedData';
+import type { Ingredient } from '../../types/database';
+import { getIngredients } from '../../services/firestore/ingredients';
+import { seedInitialIngredients } from '../../utils/seedData';
 
 export default function IngredientsManager() {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
