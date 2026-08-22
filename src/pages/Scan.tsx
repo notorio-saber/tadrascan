@@ -50,13 +50,15 @@ export default function Scan() {
       
       // 2. Buscar o produto no banco
       const allProducts = await getProducts();
+      
       const product = allProducts.find(
-        p => p.brand.toLowerCase() === iaResponse.brand.toLowerCase() && 
-             p.name.toLowerCase() === iaResponse.name.toLowerCase()
+        p => 
+          p.brand?.toLowerCase().trim().includes(iaResponse.brand.toLowerCase().trim()) && 
+          p.name?.toLowerCase().trim().includes(iaResponse.name.toLowerCase().trim())
       );
 
       if (!product) {
-        alert('Produto reconhecido pela IA, mas não encontrado no nosso banco de dados. (Em breve implementaremos a leitura da composição original!)');
+        alert(`Produto reconhecido pela IA (${iaResponse.brand} - ${iaResponse.name}), mas não encontrado no nosso banco de dados. Cadastre-o primeiro em /admin/products.`);
         setScanning(false);
         return;
       }

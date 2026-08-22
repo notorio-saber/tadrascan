@@ -11,7 +11,7 @@ export async function addProduct(product: Omit<Product, 'id'>) {
 }
 
 export async function getProducts(): Promise<Product[]> {
-  const q = query(collection(db, COLLECTION_NAME), orderBy('brand'));
+  const q = query(collection(db, COLLECTION_NAME));
   const snapshot = await getDocs(q);
   return snapshot.docs.map(doc => doc.data() as Product);
 }
