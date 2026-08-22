@@ -41,7 +41,12 @@ export default function Scan() {
       });
       
       if (!response.ok) {
-        throw new Error('Falha ao se comunicar com a IA');
+        let errMessage = 'Falha ao se comunicar com a IA';
+        try {
+          const errData = await response.json();
+          if (errData.error) errMessage = errData.error;
+        } catch(e) {}
+        throw new Error(errMessage);
       }
 
       const iaResponse = await response.json();
@@ -114,9 +119,9 @@ export default function Scan() {
       const analysisId = await saveAnalysis(result);
       navigate(`/result/${analysisId}`);
 
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      alert('Erro durante a análise da imagem.');
+      alert(`Erro: ${error.message || 'Erro durante a análise da imagem.'}`);
       setScanning(false);
     }
   };
