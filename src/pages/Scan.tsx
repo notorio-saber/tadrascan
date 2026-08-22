@@ -57,13 +57,7 @@ export default function Scan() {
           p.name?.toLowerCase().trim().includes(iaResponse.name.toLowerCase().trim())
       );
 
-      if (!product) {
-        alert(`Produto reconhecido pela IA (${iaResponse.brand} - ${iaResponse.name}), mas não encontrado no nosso banco de dados. Cadastre-o primeiro em /admin/products.`);
-        setScanning(false);
-        return;
-      }
-
-      // 3. Pegar perfil do usuário e ingredientes
+      // 3. Pegar perfil do usuário e ingredientes globais
       const profile = await getSkinProfile(currentUser.uid);
       if (!profile) {
         navigate('/onboarding');
@@ -74,26 +68,47 @@ export default function Scan() {
       const matchedIngredients: Ingredient[] = [];
       const unknownIngredients: string[] = [];
 
-      if (product.normalizedIngredients) {
-        product.normalizedIngredients.forEach(input => {
-          const match = allIngredients.find(ing => 
-            ing.name.toLowerCase() === input.toLowerCase() || 
-            (ing.synonyms && ing.synonyms.map(s => s.toLowerCase()).includes(input.toLowerCase()))
-          );
-          if (match) {
-            matchedIngredients.push(match);
-          } else {
-            unknownIngredients.push(input);
-          }
-        });
+      let ingredientsToAnalyze: string[] = [];
+      let originalInci = '';
+      let productId = undefined;
+
+      if (product) {
+        // Usa o produto do banco
+        ingredientsToAnalyze = product.normalizedIngredients || [];
+        originalInci = product.originalInci || '';
+        productId = product.id;
+      } else {
+        // Se não achou no banco, usa a IA!
+        if (iaResponse.ingredients && iaResponse.ingredients.length > 0) {
+          ingredientsToAnalyze = iaResponse.ingredients;
+          originalInci = iaResponse.ingredients.join(', ');
+          alert(`Produto novo! A IA analisou o rótulo do ${iaResponse.brand} ${iaResponse.name} em tempo real.`);
+        } else {
+          alert(`Produto reconhecido (${iaResponse.brand} - ${iaResponse.name}), mas a IA não conseguiu extrair os ingredientes.`);
+          setScanning(false);
+          return;
+        }
       }
+
+      // Cruze os ingredientes
+      ingredientsToAnalyze.forEach(input => {
+        const match = allIngredients.find(ing => 
+          ing.name.toLowerCase() === input.toLowerCase() || 
+          (ing.synonyms && ing.synonyms.map(s => s.toLowerCase()).includes(input.toLowerCase()))
+        );
+        if (match) {
+          matchedIngredients.push(match);
+        } else {
+          unknownIngredients.push(input);
+        }
+      });
 
       // 4. Rodar Motor
       const result = analyzeCompatibility(profile, matchedIngredients);
       result.unknownIngredients = unknownIngredients;
       result.userId = currentUser.uid;
-      result.originalInci = product.originalInci;
-      result.productId = product.id; // Guarda a refência do produto identificado
+      result.originalInci = originalInci;
+      result.productId = productId; 
 
       // 5. Salvar e redirecionar
       const analysisId = await saveAnalysis(result);

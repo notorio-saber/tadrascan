@@ -16,28 +16,35 @@ const handler: Handler = async (event, context) => {
 
     const apiKey = process.env.VITE_GEMINI_API_KEY;
 
-    // Se a chave não existir, usamos o modo de demonstração prometido ao usuário.
     if (!apiKey) {
-      console.log('Chave do Gemini não encontrada, usando modo demonstração...');
-      return {
-        statusCode: 200,
-        body: JSON.stringify({ brand: 'Principia', name: 'Sérum Niacinamida', demo: true })
-      };
+      console.error('Chave do Gemini (VITE_GEMINI_API_KEY) não está configurada no ambiente.');
+      return { statusCode: 500, body: JSON.stringify({ error: 'Serviço de Inteligência Artificial indisponível no momento.' }) };
     }
 
     // Inicializa a IA
     const ai = new GoogleGenAI({ apiKey });
 
     // O formato em Base64 recebido do frontend geralmente vem com o prefixo 'data:image/jpeg;base64,...'
-    // Precisamos limpar esse prefixo para enviar a string pura para a API do Gemini.
     const cleanBase64 = imageBase64.replace(/^data:image\/\w+;base64,/, '');
 
-    // Prompt estrito para forçar a IA a responder em JSON estruturado
+    // Prompt estrito para forçar a IA a retornar o produto completo, incluindo ingredientes
     const prompt = `
-      Você é um especialista em cosméticos. Olhe para a foto da embalagem ou frasco deste produto.
-      Identifique a marca (brand) e o nome comercial do produto (name).
-      Me retorne APENAS um JSON válido com essas duas propriedades: "brand" e "name".
-      Exemplo: {"brand": "La Roche-Posay", "name": "Effaclar Concentrado"}
+      Você é um especialista em formulações de cosméticos e dermatologia.
+      Olhe para a foto da embalagem deste produto.
+      Identifique o produto, busque em sua base de conhecimento qual é a composição exata (lista INCI de ingredientes) dele.
+      Me retorne APENAS um JSON válido contendo:
+      - "brand": A marca do produto.
+      - "name": O nome comercial do produto.
+      - "ingredients": Um array de strings, contendo a lista completa de ingredientes.
+      
+      Exemplo:
+      {
+        "brand": "Sol de Janeiro",
+        "name": "Bumbum Cream",
+        "ingredients": ["Aqua", "Glycerin", "Mica", "Caffeine"]
+      }
+      
+      Se não tiver certeza absoluta da composição, faça o melhor palpite educado baseado no tipo de produto.
       Não adicione blocos de markdown ou texto extra, apenas o JSON.
     `;
 
@@ -62,7 +69,6 @@ const handler: Handler = async (event, context) => {
     const text = response.text?.trim() || '{}';
     
     // Tenta fazer o parse do JSON retornado pela IA
-    // Pode vir com marcação ```json, vamos limpar
     let cleanJsonStr = text;
     if (text.startsWith('```json')) {
       cleanJsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
@@ -79,8 +85,9 @@ const handler: Handler = async (event, context) => {
       },
       body: JSON.stringify({
         brand: result.brand || 'Desconhecida',
-        name: result.name || 'Desconhecido',
-        demo: false
+        name: result.name || 'Produto Desconhecido',
+        ingredients: result.ingredients || [],
+        aiGenerated: true
       })
     };
 
