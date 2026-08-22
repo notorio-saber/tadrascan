@@ -113,7 +113,9 @@ export default function Scan() {
       result.unknownIngredients = unknownIngredients;
       result.userId = currentUser.uid;
       result.originalInci = originalInci;
-      result.productId = productId; 
+      if (productId) {
+        result.productId = productId;
+      }
 
       // 5. Salvar e redirecionar
       const analysisId = await saveAnalysis(result);
