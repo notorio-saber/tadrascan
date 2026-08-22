@@ -19,11 +19,11 @@ export default function ProtectedRoute({ children, adminOnly = false }: Protecte
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // Provisório: para MVP local, vamos aceitar qualquer usuário logado ou checar se o email é o do admin.
+  // Lista provisória de UIDs de administradores (MVP)
   // Futuramente substituiremos por Custom Claims no token.
-  if (adminOnly && !currentUser.email?.includes('admin')) {
-    // Para fins de dev, se você logar com uma conta "admin@...", você entra.
-    // Ou remova a verificação `includes('admin')` se quiser testar livremente.
+  const ADMIN_UIDS = ['NQglP9uMWUSi9cmgGjJut6YOTzs1'];
+
+  if (adminOnly && !ADMIN_UIDS.includes(currentUser.uid)) {
     return <Navigate to="/app" replace />;
   }
 
