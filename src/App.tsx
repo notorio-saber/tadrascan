@@ -9,6 +9,9 @@ import Dashboard from './pages/admin/Dashboard';
 import IngredientsManager from './pages/admin/IngredientsManager';
 import ProductsManager from './pages/admin/ProductsManager';
 
+import Analyze from './pages/Analyze';
+import AnalysisResult from './pages/AnalysisResult';
+
 function App() {
   return (
     <Router>
@@ -18,6 +21,8 @@ function App() {
         <Route element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
           <Route path="/app" element={<Home />} />
           <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="/analyze" element={<Analyze />} />
+          <Route path="/result/:id" element={<AnalysisResult />} />
         </Route>
 
         <Route path="/admin" element={<ProtectedRoute adminOnly><AdminLayout /></ProtectedRoute>}>

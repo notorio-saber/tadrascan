@@ -34,3 +34,32 @@ export interface Product {
   updatedAt: string;
   authorId?: string;
 }
+
+export interface SkinProfile {
+  id?: string;
+  userId: string;
+  // Baseado no Quiz Tadra
+  skinType: 'dry' | 'normal' | 'combo' | 'oily';
+  phototype?: number;
+  sensitivity: 'yes' | 'sometimes' | 'no';
+  concerns: string[];
+  redFlags: boolean;
+  updatedAt: string;
+}
+
+export interface AnalysisResult {
+  id?: string;
+  userId?: string;
+  productId?: string; // Se foi um produto salvo
+  productName?: string;
+  originalInci?: string;
+  
+  compatibilityScore: number; // 0 - 100
+  classification: 'Excelente' | 'Boa' | 'Moderada' | 'Atenção' | 'Dados Insuficientes';
+  
+  positiveReasons: string[];
+  attentionPoints: string[];
+  unknownIngredients: string[];
+  
+  createdAt: string;
+}
