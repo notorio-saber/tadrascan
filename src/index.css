@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-tadra-bgDeep text-tadra-textStrong font-sans antialiased;
+  }
+}
