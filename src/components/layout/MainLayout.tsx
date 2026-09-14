@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Home, ScanLine, UserCircle, ShoppingBag, Search } from 'lucide-react';
+import { Home, ScanLine, UserCircle, ShoppingBag } from 'lucide-react';
 
 export default function MainLayout() {
   const location = useLocation();

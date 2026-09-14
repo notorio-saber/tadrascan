@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Camera, Search, Sparkles } from 'lucide-react';
+import { Camera, Sparkles } from 'lucide-react';
 
 export default function Home() {
   return (
