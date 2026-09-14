@@ -3,12 +3,11 @@ import {
   doc, 
   setDoc, 
   getDocs,
-  getDoc,
   deleteDoc,
   query,
   orderBy
 } from 'firebase/firestore';
-import { db } from '../../lib/firebase';
+import { db } from '../firebase';
 import type { AffiliateProduct } from '../../types/database';
 
 const COLLECTION_NAME = 'affiliate_products';

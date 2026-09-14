@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
-import { db } from '../lib/firebase';
+import { db } from '../services/firebase';
 import { useAuth } from '../contexts/AuthContext';
 import type { AnalysisResult } from '../types/database';
 import { History, LogOut, ChevronRight } from 'lucide-react';
 import { signOut } from 'firebase/auth';
-import { auth } from '../lib/firebase';
+import { auth } from '../services/firebase';
 
 export default function Profile() {
   const { currentUser } = useAuth();
