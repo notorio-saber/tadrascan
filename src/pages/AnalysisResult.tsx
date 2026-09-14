@@ -71,8 +71,8 @@ export default function AnalysisResult() {
         <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
           
           <div className="relative group">
-            <div className={\`absolute inset-0 bg-gradient-to-tr \${scoreGradient} rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity\`}></div>
-            <div className={\`w-40 h-40 rounded-full flex flex-col items-center justify-center shrink-0 border-4 relative bg-white \${scoreColorClass}\`}>
+            <div className={`absolute inset-0 bg-gradient-to-tr ${scoreGradient} rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity`}></div>
+            <div className={`w-40 h-40 rounded-full flex flex-col items-center justify-center shrink-0 border-4 relative bg-white ${scoreColorClass}`}>
               <span className="text-5xl font-bold font-playfair">{result.compatibilityScore}</span>
               <span className="text-xs font-geist font-bold uppercase tracking-widest opacity-60 mt-1">Score</span>
             </div>

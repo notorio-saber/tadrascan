@@ -92,11 +92,11 @@ export default function Scan() {
 
       // 4. Salvar e redirecionar
       const analysisId = await saveAnalysis(result);
-      navigate(\`/result/\${analysisId}\`);
+      navigate(`/result/${analysisId}`);
 
     } catch (error: any) {
       console.error(error);
-      alert(\`Erro: \${error.message || 'Erro durante a análise da imagem.'}\`);
+      alert(`Erro: ${error.message || 'Erro durante a análise da imagem.'}`);
       setScanning(false);
     }
   };

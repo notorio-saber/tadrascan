@@ -24,8 +24,8 @@ export default function MainLayout() {
       {/* Floating Bottom Navigation Bar (Mobile) */}
       <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm bg-white/90 backdrop-blur-xl rounded-3xl border border-white/50 shadow-2xl shadow-tadra-wine/10 p-2 flex justify-between items-center z-50 md:hidden">
         
-        <Link to="/app" className={\`flex-1 flex flex-col items-center justify-center p-2 rounded-2xl transition-all \${currentPath === '/app' ? 'text-tadra-wine bg-tadra-wine/5' : 'text-gray-400 hover:text-tadra-wine/70'}\`}>
-          <Home className={\`w-6 h-6 mb-1 \${currentPath === '/app' ? 'fill-tadra-wine/10' : ''}\`} />
+        <Link to="/app" className={`flex-1 flex flex-col items-center justify-center p-2 rounded-2xl transition-all ${currentPath === '/app' ? 'text-tadra-wine bg-tadra-wine/5' : 'text-gray-400 hover:text-tadra-wine/70'}`}>
+          <Home className={`w-6 h-6 mb-1 ${currentPath === '/app' ? 'fill-tadra-wine/10' : ''}`} />
           <span className="text-[10px] font-medium font-geist">Início</span>
         </Link>
         
@@ -35,7 +35,7 @@ export default function MainLayout() {
           </div>
         </Link>
 
-        <Link to="/onboarding" className={\`flex-1 flex flex-col items-center justify-center p-2 rounded-2xl transition-all \${currentPath === '/onboarding' ? 'text-tadra-wine bg-tadra-wine/5' : 'text-gray-400 hover:text-tadra-wine/70'}\`}>
+        <Link to="/onboarding" className={`flex-1 flex flex-col items-center justify-center p-2 rounded-2xl transition-all ${currentPath === '/onboarding' ? 'text-tadra-wine bg-tadra-wine/5' : 'text-gray-400 hover:text-tadra-wine/70'}`}>
           <History className="w-6 h-6 mb-1" />
           <span className="text-[10px] font-medium font-geist">Perfil</span>
         </Link>
