@@ -82,10 +82,10 @@ const handler: Handler = async (event, context) => {
     const text = response.text?.trim() || '{}';
     
     let cleanJsonStr = text;
-    if (text.startsWith('\`\`\`json')) {
-      cleanJsonStr = text.replace(/\`\`\`json/g, '').replace(/\`\`\`/g, '').trim();
-    } else if (text.startsWith('\`\`\`')) {
-      cleanJsonStr = text.replace(/\`\`\`/g, '').trim();
+    if (text.startsWith('```json')) {
+      cleanJsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
+    } else if (text.startsWith('```')) {
+      cleanJsonStr = text.replace(/```/g, '').trim();
     }
 
     const result = JSON.parse(cleanJsonStr);
@@ -112,7 +112,7 @@ const handler: Handler = async (event, context) => {
     console.error('Erro no OCR/IA:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: \`Falha na Inteligência Artificial: \${error.message}\` })
+      body: JSON.stringify({ error: `Falha na Inteligência Artificial: ${error.message}` })
     };
   }
 };
