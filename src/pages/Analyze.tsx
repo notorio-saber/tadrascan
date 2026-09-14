@@ -84,40 +84,66 @@ export default function Analyze() {
   };
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Carregando...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-primary-500/30 border-t-primary-500 rounded-full animate-spin"></div>
+      </div>
+    );
   }
 
   return (
-    <div className="p-6 md:p-12 max-w-3xl mx-auto w-full">
-      <h2 className="text-3xl font-playfair font-semibold text-tadra-textStrong mb-2">
-        Nova Análise
+    <div className="p-6 md:p-12 max-w-2xl mx-auto w-full flex flex-col items-center mt-4 pb-24">
+      <h2 className="text-3xl font-jakarta font-semibold text-white mb-2 text-center">
+        Busca <span className="gradient-text bg-gradient-to-r from-primary-400 to-primary-600">Manual</span>
       </h2>
-      <p className="text-tadra-textSoft mb-8">
+      <p className="text-white/60 mb-8 text-center text-sm">
         Cole abaixo a lista de ingredientes (INCI) do cosmético para cruzarmos com o seu perfil de pele.
       </p>
 
-      <div className="bg-white/60 p-6 rounded-2xl shadow-sm border border-tadra-wine/5">
-        <label className="block text-sm font-geist text-tadra-textStrong font-medium mb-3">
-          Composição do Produto (Ingredientes)
-        </label>
-        <textarea
-          value={inciText}
-          onChange={e => setInciText(e.target.value)}
-          placeholder="Ex: Aqua, Niacinamide, Glycerin, Salicylic Acid..."
-          className="w-full h-40 p-4 rounded-xl border border-gray-200 focus:border-tadra-wine outline-none bg-white font-geist text-sm resize-none mb-4"
-        />
+      <div className="w-full relative group">
         
-        <button 
-          onClick={handleAnalyze}
-          disabled={analyzing || !inciText.trim()}
-          className="w-full px-6 py-4 bg-tadra-wine text-white rounded-xl font-medium hover:bg-tadra-wine/90 transition-colors disabled:opacity-50"
-        >
-          {analyzing ? 'Analisando e Cruzando Dados...' : 'Analisar Compatibilidade'}
-        </button>
+        <div className="absolute -inset-1 bg-gradient-to-r from-primary-600/20 via-primary-500/10 to-primary-600/20 rounded-[2rem] blur-xl opacity-50 group-hover:opacity-100 transition duration-1000"></div>
 
-        <p className="text-xs text-tadra-textSoft text-center mt-4">
-          O aplicativo usará as {profile?.concerns.length} queixas do seu perfil para gerar o diagnóstico.
-        </p>
+        <div className="w-full glass-effect bg-gradient-to-b from-white/10 to-white/5 p-6 md:p-8 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.3)] border border-white/20 relative z-10">
+          
+          <label className="block text-sm font-jakarta text-white font-medium mb-3 uppercase tracking-widest opacity-90">
+            Composição do Produto
+          </label>
+          
+          <div className="relative mb-6">
+            <textarea
+              value={inciText}
+              onChange={e => setInciText(e.target.value)}
+              placeholder="Ex: Aqua, Niacinamide, Glycerin, Salicylic Acid..."
+              className="w-full h-48 p-4 rounded-xl border border-white/10 bg-darkGray-100/50 text-white placeholder-white/30 focus:border-primary-500/50 outline-none font-inter text-sm resize-none shadow-inner"
+            />
+          </div>
+          
+          <button 
+            onClick={handleAnalyze}
+            disabled={analyzing || !inciText.trim()}
+            className="w-full py-4 glass-button bg-primary-500/30 border border-primary-500/50 text-white rounded-xl font-medium hover:bg-primary-500/40 transition-all active:scale-[0.98] disabled:opacity-50 shadow-[0_0_20px_theme('colors.primary.500'/30%)] flex items-center justify-center gap-2"
+          >
+            {analyzing ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                Analisando Dados...
+              </>
+            ) : (
+              'Analisar Compatibilidade'
+            )}
+          </button>
+
+          <div className="mt-6 flex items-start gap-3 p-4 rounded-xl bg-white/5 border border-white/10">
+            <div className="w-8 h-8 rounded-full bg-primary-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg className="w-4 h-4 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </div>
+            <p className="text-xs text-white/60 leading-relaxed font-inter">
+              A Inteligência Artificial fará a varredura e o diagnóstico cruzando a fórmula com as <strong className="text-white">queixas do seu perfil</strong>.
+            </p>
+          </div>
+
+        </div>
       </div>
     </div>
   );

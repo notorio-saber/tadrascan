@@ -13,20 +13,7 @@ export default function MainLayout() {
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-500/10 rounded-full blur-[100px]"></div>
       </div>
 
-      {/* Glass Header */}
-      <header className="px-6 py-4 md:px-8 border-b border-white/10 bg-darkGray-100/50 backdrop-blur-xl sticky top-0 z-50 flex justify-between items-center">
-        <div className="flex items-center gap-3">
-          <div className="icon-circle shadow-lg w-8 h-8">
-            <div className="w-4 h-4 rounded-full bg-primary-500 shadow-[0_0_10px_rgba(139,92,246,0.5)]"></div>
-          </div>
-          <h1 className="text-xl font-semibold font-jakarta tracking-tight">
-            <Link to="/app">TADRA</Link>
-          </h1>
-        </div>
-        <Link to="/profile" className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors">
-          <UserCircle className="w-5 h-5 text-white/70" />
-        </Link>
-      </header>
+      {/* Removed Header as per user request */}
       
       <main className="flex-1 flex flex-col pb-28 md:pb-8">
         <Outlet />
