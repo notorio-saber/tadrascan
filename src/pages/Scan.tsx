@@ -10,8 +10,7 @@ export default function Scan() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [statusText, setStatusText] = useState('');
   
-  const cameraInputRef = useRef<HTMLInputElement>(null);
-  const galleryInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { currentUser } = useAuth();
 
@@ -98,6 +97,34 @@ export default function Scan() {
     }
   };
 
+  const renderPointCloud = () => (
+    <div className="relative w-48 h-48 flex items-center justify-center">
+      {/* Núcleo Pulsante */}
+      <div className="absolute w-16 h-16 bg-primary-500/20 rounded-full animate-pulseGlow shadow-[0_0_30px_theme('colors.primary.500'/80%)] border border-primary-400/50"></div>
+      <div className="absolute w-8 h-8 bg-primary-400 rounded-full animate-pulse shadow-[0_0_20px_theme('colors.primary.400')]"></div>
+      
+      {/* Órbitas (Nuvem de Pontos) */}
+      <div className="absolute w-full h-full animate-orbit">
+        <div className="absolute top-0 left-1/2 w-3 h-3 bg-white rounded-full shadow-[0_0_10px_white]"></div>
+        <div className="absolute bottom-0 right-1/4 w-2 h-2 bg-primary-300 rounded-full shadow-[0_0_8px_theme('colors.primary.300')]"></div>
+      </div>
+      
+      <div className="absolute w-3/4 h-3/4 animate-orbitReverse" style={{ animationDuration: '5s' }}>
+        <div className="absolute top-1/4 left-0 w-2 h-2 bg-primary-200 rounded-full shadow-[0_0_10px_theme('colors.primary.200')]"></div>
+        <div className="absolute bottom-1/4 right-0 w-3 h-3 bg-white rounded-full shadow-[0_0_10px_white]"></div>
+      </div>
+      
+      <div className="absolute w-full h-full animate-orbit" style={{ animationDuration: '7s' }}>
+        <div className="absolute top-1/2 right-0 w-1.5 h-1.5 bg-primary-100 rounded-full shadow-[0_0_5px_theme('colors.primary.100')]"></div>
+        <div className="absolute bottom-1/2 left-0 w-2.5 h-2.5 bg-primary-400 rounded-full shadow-[0_0_8px_theme('colors.primary.400')]"></div>
+      </div>
+
+      {/* Ondas de Escaneamento (Anéis de radar) */}
+      <div className="absolute inset-0 border border-primary-500/10 rounded-full animate-ping" style={{ animationDuration: '3s' }}></div>
+      <div className="absolute inset-4 border border-primary-400/20 rounded-full animate-ping" style={{ animationDuration: '2s' }}></div>
+    </div>
+  );
+
   return (
     <div className="p-6 md:p-12 max-w-xl mx-auto w-full flex flex-col items-center pb-24 mt-4">
       <h2 className="text-3xl font-jakarta font-semibold text-white mb-2 text-center">
@@ -116,50 +143,20 @@ export default function Scan() {
           
           {/* Preview da Câmera / Imagem */}
           <div 
-            className="w-full aspect-[3/4] bg-darkGray-100/50 rounded-2xl border-2 border-dashed border-primary-500/30 flex flex-col items-center justify-center overflow-hidden relative mb-6"
+            className="w-full aspect-[3/4] bg-darkGray-100/30 rounded-2xl border border-white/10 flex flex-col items-center justify-center overflow-hidden relative mb-6 shadow-inner"
           >
             {imagePreview ? (
               <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
             ) : (
-              <div className="text-white/50 flex flex-col items-center opacity-60">
-                <svg className="w-12 h-12 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                <span className="text-sm font-medium">Nenhuma foto selecionada</span>
+              <div className="flex flex-col items-center justify-center h-full w-full opacity-80">
+                {renderPointCloud()}
               </div>
             )}
 
             {/* Efeito de Scanner Animado (Overlay) */}
             {scanning && (
               <div className="absolute inset-0 z-10 flex flex-col items-center justify-center overflow-hidden bg-primary-500/10">
-                {/* Nuvem de pontos "IA Viva" */}
-                <div className="relative w-48 h-48 flex items-center justify-center">
-                  
-                  {/* Núcleo Pulsante */}
-                  <div className="absolute w-16 h-16 bg-primary-500/20 rounded-full animate-pulseGlow shadow-[0_0_30px_theme('colors.primary.500'/80%)] border border-primary-400/50"></div>
-                  <div className="absolute w-8 h-8 bg-primary-400 rounded-full animate-pulse shadow-[0_0_20px_theme('colors.primary.400')]"></div>
-                  
-                  {/* Órbitas (Nuvem de Pontos) */}
-                  <div className="absolute w-full h-full animate-orbit">
-                    <div className="absolute top-0 left-1/2 w-3 h-3 bg-white rounded-full shadow-[0_0_10px_white]"></div>
-                    <div className="absolute bottom-0 right-1/4 w-2 h-2 bg-primary-300 rounded-full shadow-[0_0_8px_theme('colors.primary.300')]"></div>
-                  </div>
-                  
-                  <div className="absolute w-3/4 h-3/4 animate-orbitReverse" style={{ animationDuration: '5s' }}>
-                    <div className="absolute top-1/4 left-0 w-2 h-2 bg-primary-200 rounded-full shadow-[0_0_10px_theme('colors.primary.200')]"></div>
-                    <div className="absolute bottom-1/4 right-0 w-3 h-3 bg-white rounded-full shadow-[0_0_10px_white]"></div>
-                  </div>
-                  
-                  <div className="absolute w-full h-full animate-orbit" style={{ animationDuration: '7s' }}>
-                    <div className="absolute top-1/2 right-0 w-1.5 h-1.5 bg-primary-100 rounded-full shadow-[0_0_5px_theme('colors.primary.100')]"></div>
-                    <div className="absolute bottom-1/2 left-0 w-2.5 h-2.5 bg-primary-400 rounded-full shadow-[0_0_8px_theme('colors.primary.400')]"></div>
-                  </div>
-
-                  {/* Ondas de Escaneamento (Anéis de radar) */}
-                  <div className="absolute inset-0 border border-primary-500/10 rounded-full animate-ping" style={{ animationDuration: '3s' }}></div>
-                  <div className="absolute inset-4 border border-primary-400/20 rounded-full animate-ping" style={{ animationDuration: '2s' }}></div>
-                </div>
+                {renderPointCloud()}
               </div>
             )}
           </div>
@@ -167,15 +164,7 @@ export default function Scan() {
           <input 
             type="file"
             accept="image/*"
-            capture="environment"
-            ref={cameraInputRef}
-            onChange={handleCapture}
-            className="hidden"
-          />
-          <input 
-            type="file"
-            accept="image/*"
-            ref={galleryInputRef}
+            ref={fileInputRef}
             onChange={handleCapture}
             className="hidden"
           />
@@ -184,18 +173,11 @@ export default function Scan() {
           {!imagePreview ? (
             <div className="flex flex-col gap-3 w-full">
               <button 
-                onClick={() => cameraInputRef.current?.click()}
+                onClick={() => fileInputRef.current?.click()}
                 className="w-full py-4 glass-button bg-primary-500/30 text-white border border-primary-500/50 rounded-xl font-medium hover:bg-primary-500/40 transition-all active:scale-[0.98] flex items-center justify-center gap-2 shadow-[0_0_20px_theme('colors.primary.500'/20%)]"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                Tirar Foto (Câmera)
-              </button>
-              <button 
-                onClick={() => galleryInputRef.current?.click()}
-                className="w-full py-4 glass-button bg-white/5 border border-white/20 text-white/90 rounded-xl font-medium hover:bg-white/10 transition-colors flex items-center justify-center gap-2"
-              >
-                <svg className="w-5 h-5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                Escolher da Galeria
+                Escanear Produto
               </button>
             </div>
           ) : (

@@ -27,16 +27,16 @@ export default function MainLayout() {
           <span className="text-[10px] font-medium font-inter">Início</span>
         </Link>
 
+        <Link to="/store" className={`flex flex-col items-center justify-center p-2 rounded-2xl transition-all ${currentPath === '/store' ? 'text-primary-400 bg-primary-500/10' : 'text-white/40 hover:text-white/70'}`}>
+          <ShoppingBag className={`w-5 h-5 mb-1 ${currentPath === '/store' ? 'fill-primary-500/20' : ''}`} />
+          <span className="text-[10px] font-medium font-inter">Loja</span>
+        </Link>
+
         {/* Center Scan Button with Glow */}
         <Link to="/scan" className="relative -top-6 flex flex-col items-center justify-center mx-auto">
           <div className="w-14 h-14 rounded-full bg-primary-500 flex items-center justify-center glow border border-primary-400/50 text-white hover:scale-105 transition-transform active:scale-95 shadow-[0_0_20px_theme('colors.primary.500'/60%)]">
             <ScanLine className="w-6 h-6" />
           </div>
-        </Link>
-
-        <Link to="/store" className={`flex flex-col items-center justify-center p-2 rounded-2xl transition-all ${currentPath === '/store' ? 'text-primary-400 bg-primary-500/10' : 'text-white/40 hover:text-white/70'}`}>
-          <ShoppingBag className={`w-5 h-5 mb-1 ${currentPath === '/store' ? 'fill-primary-500/20' : ''}`} />
-          <span className="text-[10px] font-medium font-inter">Loja</span>
         </Link>
 
         <Link to="/profile" className={`flex flex-col items-center justify-center p-2 rounded-2xl transition-all ${currentPath === '/profile' ? 'text-primary-400 bg-primary-500/10' : 'text-white/40 hover:text-white/70'}`}>
