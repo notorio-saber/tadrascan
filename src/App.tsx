@@ -9,7 +9,6 @@ import Dashboard from './pages/admin/Dashboard';
 import IngredientsManager from './pages/admin/IngredientsManager';
 import ProductsManager from './pages/admin/ProductsManager';
 
-import Analyze from './pages/Analyze';
 import AnalysisResult from './pages/AnalysisResult';
 import Scan from './pages/Scan';
 
@@ -27,7 +26,6 @@ function App() {
         <Route element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
           <Route path="/app" element={<Home />} />
           <Route path="/onboarding" element={<Onboarding />} />
-          <Route path="/analyze" element={<Analyze />} />
           <Route path="/scan" element={<Scan />} />
           <Route path="/result/:id" element={<AnalysisResult />} />
           

@@ -20,16 +20,11 @@ export default function MainLayout() {
       </main>
 
       {/* Floating Bottom Navigation Bar (Mobile) - Glassmorphism */}
-      <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[95%] max-w-sm glass-effect bg-white/5 rounded-3xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)] p-2 grid grid-cols-5 items-center z-50 md:hidden">
+      <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[95%] max-w-sm glass-effect bg-white/5 rounded-3xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)] p-2 grid grid-cols-4 items-center z-50 md:hidden">
         
         <Link to="/app" className={`flex flex-col items-center justify-center p-2 rounded-2xl transition-all ${currentPath === '/app' ? 'text-primary-400 bg-primary-500/10' : 'text-white/40 hover:text-white/70'}`}>
           <Home className={`w-5 h-5 mb-1 ${currentPath === '/app' ? 'fill-primary-500/20' : ''}`} />
           <span className="text-[10px] font-medium font-inter">Início</span>
-        </Link>
-        
-        <Link to="/analyze" className={`flex flex-col items-center justify-center p-2 rounded-2xl transition-all ${currentPath === '/analyze' ? 'text-primary-400 bg-primary-500/10' : 'text-white/40 hover:text-white/70'}`}>
-          <Search className={`w-5 h-5 mb-1 ${currentPath === '/analyze' ? 'fill-primary-500/20' : ''}`} />
-          <span className="text-[10px] font-medium font-inter">Busca</span>
         </Link>
 
         {/* Center Scan Button with Glow */}
