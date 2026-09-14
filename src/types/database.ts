@@ -60,6 +60,9 @@ export interface AnalysisResult {
   positiveReasons: string[];
   attentionPoints: string[];
   unknownIngredients: string[];
+  productDescription?: string;
+  howToUse?: string;
+  brand?: string;
   
   createdAt: string;
 }
