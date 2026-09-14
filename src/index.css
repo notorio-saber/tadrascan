@@ -32,7 +32,7 @@
     color: transparent;
   }
   .glow {
-    box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
+    box-shadow: 0 0 30px theme('colors.primary.500' / 40%);
   }
   .icon-circle {
     height: 2.5rem;
@@ -47,7 +47,7 @@
   
   .scrollable-content {
     scrollbar-width: thin;
-    scrollbar-color: rgba(139, 92, 246, 0.5) transparent;
+    scrollbar-color: theme('colors.primary.500' / 50%) transparent;
   }
   .scrollable-content::-webkit-scrollbar {
     width: 6px;
@@ -57,10 +57,10 @@
     border-radius: 3px;
   }
   .scrollable-content::-webkit-scrollbar-thumb {
-    background: rgba(139, 92, 246, 0.5);
+    background: theme('colors.primary.500' / 50%);
     border-radius: 3px;
   }
   .scrollable-content::-webkit-scrollbar-thumb:hover {
-    background: rgba(139, 92, 246, 0.7);
+    background: theme('colors.primary.500' / 70%);
   }
 }

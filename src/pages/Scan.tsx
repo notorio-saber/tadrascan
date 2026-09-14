@@ -131,8 +131,34 @@ export default function Scan() {
 
             {/* Efeito de Scanner Animado (Overlay) */}
             {scanning && (
-              <div className="absolute inset-0 bg-primary-500/10 z-10 flex flex-col items-center justify-center backdrop-blur-[2px]">
-                <div className="w-full h-[2px] bg-primary-400 shadow-[0_0_20px_rgba(139,92,246,0.8)] animate-scan" />
+              <div className="absolute inset-0 z-10 flex items-center justify-center bg-darkGray-100/40 backdrop-blur-sm overflow-hidden">
+                {/* Nuvem de pontos "IA Viva" */}
+                <div className="relative w-48 h-48 flex items-center justify-center">
+                  
+                  {/* Núcleo Pulsante */}
+                  <div className="absolute w-16 h-16 bg-primary-500/20 rounded-full animate-pulseGlow shadow-[0_0_30px_theme('colors.primary.500'/80%)] border border-primary-400/50"></div>
+                  <div className="absolute w-8 h-8 bg-primary-400 rounded-full animate-pulse shadow-[0_0_20px_theme('colors.primary.400')]"></div>
+                  
+                  {/* Órbitas (Nuvem de Pontos) */}
+                  <div className="absolute w-full h-full animate-orbit">
+                    <div className="absolute top-0 left-1/2 w-3 h-3 bg-white rounded-full shadow-[0_0_10px_white]"></div>
+                    <div className="absolute bottom-0 right-1/4 w-2 h-2 bg-primary-300 rounded-full shadow-[0_0_8px_theme('colors.primary.300')]"></div>
+                  </div>
+                  
+                  <div className="absolute w-3/4 h-3/4 animate-orbitReverse" style={{ animationDuration: '5s' }}>
+                    <div className="absolute top-1/4 left-0 w-2 h-2 bg-primary-200 rounded-full shadow-[0_0_10px_theme('colors.primary.200')]"></div>
+                    <div className="absolute bottom-1/4 right-0 w-3 h-3 bg-white rounded-full shadow-[0_0_10px_white]"></div>
+                  </div>
+                  
+                  <div className="absolute w-full h-full animate-orbit" style={{ animationDuration: '7s' }}>
+                    <div className="absolute top-1/2 right-0 w-1.5 h-1.5 bg-primary-100 rounded-full shadow-[0_0_5px_theme('colors.primary.100')]"></div>
+                    <div className="absolute bottom-1/2 left-0 w-2.5 h-2.5 bg-primary-400 rounded-full shadow-[0_0_8px_theme('colors.primary.400')]"></div>
+                  </div>
+
+                  {/* Ondas de Escaneamento (Anéis de radar) */}
+                  <div className="absolute inset-0 border border-primary-500/10 rounded-full animate-ping" style={{ animationDuration: '3s' }}></div>
+                  <div className="absolute inset-4 border border-primary-400/20 rounded-full animate-ping" style={{ animationDuration: '2s' }}></div>
+                </div>
               </div>
             )}
           </div>
