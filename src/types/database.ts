@@ -66,3 +66,16 @@ export interface AnalysisResult {
   
   createdAt: string;
 }
+
+export interface AffiliateProduct {
+  id?: string;
+  name: string;
+  brand: string;
+  category: string; // Ex: 'Sérum', 'Protetor Solar', 'Limpeza'
+  imageUrl: string;
+  affiliateUrl: string;
+  price?: number;
+  description?: string;
+  recommendedSkinTypes?: string[]; // Ex: ['oily', 'combo']
+  createdAt: string;
+}

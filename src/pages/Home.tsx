@@ -1,43 +1,45 @@
 import { Link } from 'react-router-dom';
-import { Camera, Search } from 'lucide-react';
+import { Camera, Search, Sparkles } from 'lucide-react';
 
 export default function Home() {
   return (
-    <div className="p-6 md:p-12 max-w-4xl mx-auto w-full flex flex-col items-center justify-center text-center mt-8">
+    <div className="p-6 md:p-12 max-w-4xl mx-auto w-full flex flex-col items-center justify-center text-center mt-12">
       
-      <div className="inline-block px-4 py-1.5 rounded-full bg-tadra-goldLight/20 text-tadra-goldDark text-xs font-semibold tracking-widest uppercase mb-6 shadow-sm border border-tadra-goldLight/30 backdrop-blur-sm">
-        Sua Pele, Nossa Ciência
+      <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-[10px] font-semibold tracking-widest uppercase mb-8 shadow-sm backdrop-blur-md text-white/80">
+        <Sparkles className="w-3 h-3 text-primary-400" />
+        Sua Pele, Nossa Inteligência
       </div>
 
-      <h2 className="text-4xl md:text-5xl font-playfair font-semibold text-tadra-textStrong mb-4 leading-tight">
-        Inteligência para<br/><i className="text-tadra-wine">sua pele.</i>
+      <h2 className="text-4xl md:text-5xl font-jakarta font-semibold text-white mb-6 leading-tight tracking-tight">
+        Análise profunda para<br/><span className="gradient-text bg-gradient-to-r from-primary-400 to-primary-600">sua pele.</span>
       </h2>
-      <p className="text-tadra-textSoft mb-12 max-w-sm text-base leading-relaxed">
-        Escaneie seus produtos e descubra instantaneamente o grau de compatibilidade com os seus objetivos reais.
+      <p className="text-white/60 mb-12 max-w-md text-base leading-relaxed font-inter">
+        Escaneie seus produtos e descubra instantaneamente o grau de compatibilidade com os seus objetivos reais usando Inteligência Artificial.
       </p>
       
-      <div className="w-full max-w-md bg-white/60 backdrop-blur-xl p-8 rounded-[2rem] shadow-2xl shadow-tadra-wine/10 border border-white/80 relative overflow-hidden group">
+      <div className="w-full max-w-md relative group">
         
         {/* Glow effect behind the card */}
-        <div className="absolute -inset-1 bg-gradient-to-r from-tadra-wine/5 via-tadra-goldLight/10 to-tadra-wine/5 rounded-[2rem] blur-xl opacity-50 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+        <div className="absolute -inset-1 bg-gradient-to-r from-primary-600/30 via-primary-500/10 to-primary-600/30 rounded-[2rem] blur-xl opacity-50 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
 
-        <div className="relative">
-          <h3 className="text-sm font-geist text-tadra-textStrong font-semibold mb-6 uppercase tracking-wider">
+        <div className="glass-effect rounded-[1.5em] relative z-10 shadow-[0_8px_32px_rgba(0,0,0,0.3)] bg-gradient-to-b from-white/10 to-white/5 border border-white/20 overflow-hidden p-8">
+          
+          <h3 className="text-sm font-jakarta text-white font-semibold mb-6 uppercase tracking-widest opacity-90">
             Nova Análise
           </h3>
           
-          <Link to="/scan" className="w-full flex items-center justify-center gap-3 px-6 py-5 bg-tadra-wine text-white rounded-2xl font-medium hover:bg-tadra-wine/90 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-tadra-wine/30 active:scale-[0.98] mb-4">
+          <Link to="/scan" className="w-full flex items-center justify-center gap-3 px-6 py-5 glass-button bg-primary-500/30 border border-primary-500/50 text-white rounded-xl font-medium hover:bg-primary-500/40 transition-all hover:shadow-[0_0_20px_rgba(139,92,246,0.3)] active:scale-[0.98] mb-4">
             <Camera className="w-5 h-5" />
             Escanear Embalagem
           </Link>
 
           <div className="relative flex items-center py-4">
-            <div className="flex-grow border-t border-tadra-textSoft/10"></div>
-            <span className="flex-shrink-0 mx-4 text-tadra-textSoft/40 text-xs uppercase tracking-widest">Ou</span>
-            <div className="flex-grow border-t border-tadra-textSoft/10"></div>
+            <div className="flex-grow border-t border-white/10"></div>
+            <span className="flex-shrink-0 mx-4 text-white/40 text-[10px] uppercase tracking-widest font-inter">Ou</span>
+            <div className="flex-grow border-t border-white/10"></div>
           </div>
 
-          <Link to="/analyze" className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-transparent text-tadra-textStrong border-2 border-tadra-wine/10 rounded-2xl font-medium hover:bg-tadra-wine/5 hover:border-tadra-wine/20 transition-all active:scale-[0.98]">
+          <Link to="/analyze" className="w-full flex items-center justify-center gap-3 px-6 py-4 glass-button bg-white/5 border border-white/20 text-white/90 rounded-xl font-medium hover:bg-white/10 transition-all active:scale-[0.98]">
             <Search className="w-5 h-5 opacity-50" />
             Digitar ingredientes manualmente
           </Link>

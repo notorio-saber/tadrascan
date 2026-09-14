@@ -6,19 +6,23 @@ export default {
   theme: {
     extend: {
       colors: {
-        tadra: {
-          wine: '#5D2A2A',
-          bgDeep: '#f6f1e8',
-          bgSoft: '#fffaf2',
-          textStrong: '#201a15',
-          textSoft: '#6b5b4d',
-          beam: '#a47551',
-          goldLight: '#d2b08f',
-          goldDark: '#7a5335'
+        primary: {
+          500: 'hsl(260, 95%, 63%)',
+          600: 'hsl(250, 95%, 58%)',
+          700: 'hsl(270, 95%, 68%)',
+        },
+        secondary: {
+          800: 'hsl(280, 90%, 80%)',
+        },
+        darkGray: {
+          50: 'hsl(225, 20%, 10%)',
+          100: 'hsl(225, 15%, 15%)',
         }
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
+        inter: ['Inter', 'sans-serif'],
+        jakarta: ['"Plus Jakarta Sans"', 'sans-serif'],
         playfair: ['Playfair Display', 'serif'],
         geist: ['Geist', 'sans-serif']
       },

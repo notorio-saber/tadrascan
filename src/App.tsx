@@ -13,6 +13,11 @@ import Analyze from './pages/Analyze';
 import AnalysisResult from './pages/AnalysisResult';
 import Scan from './pages/Scan';
 
+// New Pages
+import Profile from './pages/Profile';
+import Store from './pages/Store';
+import AdminStore from './pages/AdminStore';
+
 function App() {
   return (
     <Router>
@@ -25,12 +30,16 @@ function App() {
           <Route path="/analyze" element={<Analyze />} />
           <Route path="/scan" element={<Scan />} />
           <Route path="/result/:id" element={<AnalysisResult />} />
+          
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/store" element={<Store />} />
         </Route>
 
         <Route path="/admin" element={<ProtectedRoute adminOnly><AdminLayout /></ProtectedRoute>}>
           <Route index element={<Dashboard />} />
           <Route path="ingredients" element={<IngredientsManager />} />
           <Route path="products" element={<ProductsManager />} />
+          <Route path="store" element={<AdminStore />} />
         </Route>
 
         {/* Rota provisória na raiz */}
