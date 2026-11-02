@@ -16,6 +16,7 @@ import Scan from './pages/Scan';
 import Profile from './pages/Profile';
 import Store from './pages/Store';
 import AdminStore from './pages/AdminStore';
+import DraIa from './pages/DraIa';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/app" element={<Home />} />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/scan" element={<Scan />} />
+          <Route path="/dra" element={<DraIa />} />
           <Route path="/result/:id" element={<AnalysisResult />} />
           
           <Route path="/profile" element={<Profile />} />
