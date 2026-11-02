@@ -26,7 +26,7 @@ export default function Home() {
   }, [currentUser]);
 
   return (
-    <div className="p-4 sm:p-6 md:p-12 max-w-4xl mx-auto w-full flex flex-col items-center justify-center text-center mt-4">
+    <div className="flex-1 flex flex-col items-center justify-center text-center p-4 sm:p-6 md:p-12 max-w-4xl mx-auto w-full my-auto min-h-[calc(100vh-12rem)]">
       
       <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-[10px] font-semibold tracking-widest uppercase mb-6 shadow-sm backdrop-blur-md text-white/80">
         <Sparkles className="w-3 h-3 text-primary-400" />

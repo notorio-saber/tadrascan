@@ -143,10 +143,10 @@ export default function DraIa() {
   ];
 
   return (
-    <div className="flex flex-col h-[calc(100vh-6.5rem)] max-w-2xl mx-auto w-full px-4 pt-2 pb-24">
+    <div className="flex flex-col h-[calc(100dvh-8rem)] max-w-2xl mx-auto w-full px-4 pt-1 pb-2">
       
       {/* Header do Chat */}
-      <div className="glass-effect bg-white/5 border border-white/10 rounded-3xl p-3.5 mb-3 flex items-center justify-between shadow-lg">
+      <div className="glass-effect bg-white/5 border border-white/10 rounded-3xl p-3 mb-2 flex items-center justify-between shadow-lg shrink-0">
         <div className="flex items-center gap-3">
           <Link to="/app" className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/60 hover:text-white transition-colors">
             <ChevronLeft className="w-4 h-4" />
@@ -242,19 +242,19 @@ export default function DraIa() {
       )}
 
       {/* Campo de Envio */}
-      <form onSubmit={handleSend} className="mt-2 relative">
+      <form onSubmit={handleSend} className="mt-2 relative shrink-0">
         <div className="relative flex items-center">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Converse com a Dra. TADRA..."
-            className="w-full pl-5 pr-12 py-3.5 bg-white/10 border border-white/20 rounded-2xl text-sm text-white placeholder-white/40 focus:outline-none focus:border-primary-400 focus:bg-white/15 transition-all font-inter shadow-lg"
+            className="w-full pl-5 pr-12 py-3 bg-white/10 border border-white/20 rounded-2xl text-base text-white placeholder-white/40 focus:outline-none focus:border-primary-400 focus:bg-white/15 transition-all font-inter shadow-lg"
           />
           <button
             type="submit"
             disabled={!input.trim() || loading}
-            className="absolute right-2 w-9 h-9 rounded-xl bg-primary-500 text-white flex items-center justify-center hover:bg-primary-600 transition-all disabled:opacity-40 shadow-[0_0_12px_theme(colors.primary.500/50%)]"
+            className="absolute right-1.5 w-9 h-9 rounded-xl bg-primary-500 text-white flex items-center justify-center hover:bg-primary-600 transition-all disabled:opacity-40 shadow-[0_0_12px_theme(colors.primary.500/50%)]"
           >
             <Send className="w-4 h-4" />
           </button>

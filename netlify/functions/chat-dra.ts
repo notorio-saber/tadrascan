@@ -64,14 +64,33 @@ ${historyContext}
       return { statusCode: 400, body: JSON.stringify({ error: 'Nenhuma mensagem enviada.' }) };
     }
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: contents,
-      config: {
-        systemInstruction: systemInstruction,
-        temperature: 0.7,
-      }
-    });
+    let response;
+    try {
+      response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: [
+          {
+            role: 'user',
+            parts: [
+              { text: `${systemInstruction}\n\n--- HISTÓRICO DA CONSULTA ---\n${(messages || []).map((m: any) => `${m.sender === 'user' ? 'Paciente' : 'Dra. TADRA'}: ${m.text}`).join('\n')}\n\nDra. TADRA:` }
+            ]
+          }
+        ]
+      });
+    } catch (modelErr) {
+      console.warn('Fallback para gemini-2.0-flash:', modelErr);
+      response = await ai.models.generateContent({
+        model: 'gemini-2.0-flash',
+        contents: [
+          {
+            role: 'user',
+            parts: [
+              { text: `${systemInstruction}\n\n--- HISTÓRICO DA CONSULTA ---\n${(messages || []).map((m: any) => `${m.sender === 'user' ? 'Paciente' : 'Dra. TADRA'}: ${m.text}`).join('\n')}\n\nDra. TADRA:` }
+            ]
+          }
+        ]
+      });
+    }
 
     const reply = response.text || 'Olá, querida! Como posso cuidar da sua pele hoje? ✨';
 
