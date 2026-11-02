@@ -65,31 +65,33 @@ ${historyContext}
     }
 
     let response;
-    try {
-      response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: [
-          {
-            role: 'user',
-            parts: [
-              { text: `${systemInstruction}\n\n--- HISTÓRICO DA CONSULTA ---\n${(messages || []).map((m: any) => `${m.sender === 'user' ? 'Paciente' : 'Dra. TADRA'}: ${m.text}`).join('\n')}\n\nDra. TADRA:` }
-            ]
-          }
-        ]
-      });
-    } catch (modelErr) {
-      console.warn('Fallback para gemini-2.0-flash:', modelErr);
-      response = await ai.models.generateContent({
-        model: 'gemini-2.0-flash',
-        contents: [
-          {
-            role: 'user',
-            parts: [
-              { text: `${systemInstruction}\n\n--- HISTÓRICO DA CONSULTA ---\n${(messages || []).map((m: any) => `${m.sender === 'user' ? 'Paciente' : 'Dra. TADRA'}: ${m.text}`).join('\n')}\n\nDra. TADRA:` }
-            ]
-          }
-        ]
-      });
+    const modelCandidates = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
+    let lastError: any = null;
+
+    for (const modelName of modelCandidates) {
+      try {
+        response = await ai.models.generateContent({
+          model: modelName,
+          contents: [
+            {
+              role: 'user',
+              parts: [
+                { text: `${systemInstruction}\n\n--- HISTÓRICO DA CONSULTA ---\n${(messages || []).map((m: any) => `${m.sender === 'user' ? 'Paciente' : 'Dra. TADRA'}: ${m.text}`).join('\n')}\n\nDra. TADRA:` }
+              ]
+            }
+          ]
+        });
+        if (response && response.text) {
+          break;
+        }
+      } catch (err: any) {
+        lastError = err;
+        console.warn(`Tentativa com ${modelName} falhou:`, err?.message || err);
+      }
+    }
+
+    if (!response || !response.text) {
+      throw lastError || new Error('Nenhum modelo respondeu');
     }
 
     const reply = response.text || 'Olá, querida! Como posso cuidar da sua pele hoje? ✨';

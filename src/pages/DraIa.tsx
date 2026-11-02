@@ -143,7 +143,7 @@ export default function DraIa() {
   ];
 
   return (
-    <div className="flex flex-col h-[calc(100dvh-8rem)] max-w-2xl mx-auto w-full px-4 pt-1 pb-2">
+    <div className="flex flex-col h-[calc(100dvh-7.5rem)] max-w-2xl mx-auto w-full px-4 pt-3 pb-1">
       
       {/* Header do Chat */}
       <div className="glass-effect bg-white/5 border border-white/10 rounded-3xl p-3 mb-2 flex items-center justify-between shadow-lg shrink-0">
