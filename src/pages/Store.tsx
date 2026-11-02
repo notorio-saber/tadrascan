@@ -240,37 +240,6 @@ export default function Store() {
                     ) : (
                       <ShoppingBag className="w-12 h-12 text-white/20 relative z-10" />
                     )}
-
-                    {/* Badge de Categoria Legível no topo esquerdo */}
-                    {product.category && (
-                      <div className="absolute top-3 left-3 bg-slate-950/90 backdrop-blur-md px-3 py-1 rounded-full border border-primary-500/40 text-[10px] font-semibold tracking-wider uppercase text-primary-300 shadow-md z-20">
-                        {product.category}
-                      </div>
-                    )}
-
-                    {/* Badge de Match com Perfil de Pele no topo direito */}
-                    <div className="absolute top-3 right-3 z-20">
-                      {matchScore !== null ? (
-                        <div className={`px-2.5 py-1 rounded-full text-[10px] font-bold font-jakarta tracking-wide backdrop-blur-md border shadow-md flex items-center gap-1 ${
-                          matchScore >= 80 
-                            ? 'bg-emerald-950/90 border-emerald-500/50 text-emerald-300'
-                            : matchScore >= 60
-                              ? 'bg-sky-950/90 border-sky-500/50 text-sky-300'
-                              : 'bg-amber-950/90 border-amber-500/50 text-amber-300'
-                        }`}>
-                          <Sparkles className="w-2.5 h-2.5" />
-                          {matchScore}% Match
-                        </div>
-                      ) : (
-                        <Link 
-                          to="/onboarding" 
-                          className="px-2.5 py-1 rounded-full text-[9px] font-medium font-inter backdrop-blur-md bg-slate-950/80 border border-white/20 text-white/60 hover:text-primary-300 hover:border-primary-500/40 transition-colors shadow-md flex items-center gap-1"
-                        >
-                          Fazer teste
-                        </Link>
-                      )}
-                    </div>
-
                   </div>
 
                   <div className="flex-1 flex flex-col">
@@ -287,14 +256,40 @@ export default function Store() {
                     )}
                   </div>
 
+                  {/* Rodapé do Card com Badges à esquerda e Botão de Ação à direita */}
                   <div className="pt-4 border-t border-white/10 mt-auto flex items-center justify-between gap-3">
-                    <div>
-                      {product.price && (
-                        <p className="text-base font-jakarta font-bold text-white">
-                          R$ {product.price.toFixed(2).replace('.', ',')}
-                        </p>
+                    <div className="flex flex-col gap-1.5 min-w-0">
+                      {/* Badge de Categoria */}
+                      {product.category && (
+                        <div className="w-fit bg-slate-950/85 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-primary-500/30 text-[9px] font-semibold tracking-wider uppercase text-primary-300 truncate shadow-sm">
+                          {product.category}
+                        </div>
                       )}
+
+                      {/* Badge de Match com Perfil de Pele */}
+                      <div>
+                        {matchScore !== null ? (
+                          <div className={`w-fit px-2.5 py-0.5 rounded-full text-[10px] font-bold font-jakarta tracking-wide backdrop-blur-md border shadow-sm flex items-center gap-1 ${
+                            matchScore >= 80 
+                              ? 'bg-emerald-950/90 border-emerald-500/50 text-emerald-300'
+                              : matchScore >= 60
+                                ? 'bg-sky-950/90 border-sky-500/50 text-sky-300'
+                                : 'bg-amber-950/90 border-amber-500/50 text-amber-300'
+                          }`}>
+                            <Sparkles className="w-2.5 h-2.5" />
+                            {matchScore}% Match
+                          </div>
+                        ) : (
+                          <Link 
+                            to="/onboarding" 
+                            className="w-fit px-2 py-0.5 rounded-full text-[9px] font-medium font-inter backdrop-blur-md bg-white/5 border border-white/15 text-white/60 hover:text-primary-300 hover:border-primary-500/40 transition-colors shadow-sm flex items-center gap-1"
+                          >
+                            Sem teste • Fazer agora
+                          </Link>
+                        )}
+                      </div>
                     </div>
+
                     <a 
                       href={product.affiliateUrl}
                       target="_blank"
