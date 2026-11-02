@@ -73,44 +73,89 @@ export default function Store() {
     fetchStoreAndProfile();
   }, [currentUser]);
 
-  // Algoritmo de cálculo de match baseado no perfil da usuária
+  // Algoritmo de cálculo de match dinâmico e calibrado por produto e perfil
   const calculateMatchScore = (product: AffiliateProduct): number | null => {
     if (!skinProfile) return null;
 
-    let score = 75; // Base neutra
+    // Gera um hash determinístico do nome do produto para dar variação realista de fórmula
+    let hash = 0;
+    const str = product.name + (product.brand || '');
+    for (let i = 0; i < str.length; i++) {
+      hash = ((hash << 5) - hash) + str.charCodeAt(i);
+      hash |= 0;
+    }
+    const pseudoRandomVariation = Math.abs(hash % 9) - 4; // Variação sutil de -4 a +4
+
+    let score = 76 + pseudoRandomVariation; 
     const text = (product.name + ' ' + (product.description || '') + ' ' + product.category).toLowerCase();
 
-    // 1. Tipo de Pele
+    // 1. Tipo de Pele (Impacto de até 25 pontos)
     if (skinProfile.skinType === 'oily') {
-      if (text.includes('oleosidade') || text.includes('acne') || text.includes('matte') || text.includes('seco') || text.includes('gl-') || text.includes('salic')) score += 15;
-      if (text.includes('óleo') || text.includes('nutritivo intenso') || text.includes('karite') || text.includes('manteiga')) score -= 25;
+      if (text.includes('antioleosidade') || text.includes('acne') || text.includes('matte') || text.includes('toque seco') || text.includes('gel de limpeza') || text.includes('gl-0') || text.includes('salic')) {
+        score += 16;
+      } else if (text.includes('hidratante') && !text.includes('gel')) {
+        score -= 8;
+      }
+      if (text.includes('karite') || text.includes('manteiga') || text.includes('creme hidratante') || text.includes('baume')) {
+        score -= 22;
+      }
     } else if (skinProfile.skinType === 'dry') {
-      if (text.includes('hidratante') || text.includes('nutri') || text.includes('karite') || text.includes('b5') || text.includes('cicaplast') || text.includes('baume')) score += 20;
-      if (text.includes('antioleosidade') || text.includes('seborregulador')) score -= 15;
+      if (text.includes('creme') || text.includes('hidratante') || text.includes('karite') || text.includes('b5') || text.includes('cicaplast') || text.includes('baume')) {
+        score += 18;
+      }
+      if (text.includes('antioleosidade') || text.includes('seborregulador') || text.includes('matte') || text.includes('toque seco')) {
+        score -= 18;
+      }
     } else if (skinProfile.skinType === 'combo') {
-      if (text.includes('equilibrado') || text.includes('fluido') || text.includes('gel')) score += 15;
+      if (text.includes('gel') || text.includes('fluido') || text.includes('foaming') || text.includes('equilibrio') || text.includes('sérum') || text.includes('serum')) {
+        score += 14;
+      }
+    } else if (skinProfile.skinType === 'normal') {
+      if (text.includes('protetor') || text.includes('fps') || text.includes('vitamina c') || text.includes('serum') || text.includes('limpeza')) {
+        score += 12;
+      }
     }
 
-    // 2. Sensibilidade
+    // 2. Sensibilidade (Impacto de até 20 pontos)
     if (skinProfile.sensitivity === 'yes') {
-      if (text.includes('sensivel') || text.includes('calmante') || text.includes('centella') || text.includes('b5') || text.includes('reparador')) score += 15;
-      if (text.includes('peeling') || text.includes('ácido') || text.includes('retinal') || text.includes('glicólico')) score -= 20;
+      if (text.includes('sensivel') || text.includes('sensível') || text.includes('calmante') || text.includes('centella') || text.includes('b5') || text.includes('reparador') || text.includes('infantil')) {
+        score += 15;
+      }
+      if (text.includes('ácido') || text.includes('acido') || text.includes('retinal') || text.includes('glicólico') || text.includes('peeling') || text.includes('alta frequencia')) {
+        score -= 24;
+      }
     }
 
-    // 3. Objetivos
+    // 3. Objetivos Específicos da Paciente
     if (skinProfile.concerns && skinProfile.concerns.length > 0) {
-      if (skinProfile.concerns.includes('spots') && (text.includes('clareador') || text.includes('melasma') || text.includes('pigment') || text.includes('mancha') || text.includes('fps 70') || text.includes('fps70'))) {
-        score += 15;
+      // Manchas / Melasma
+      if (skinProfile.concerns.includes('spots')) {
+        if (text.includes('melasma') || text.includes('clareador') || text.includes('pigment') || text.includes('fps 70') || text.includes('fps70') || text.includes('com cor')) {
+          score += 16;
+        }
       }
-      if (skinProfile.concerns.includes('aging') && (text.includes('antirrugas') || text.includes('retinal') || text.includes('booster') || text.includes('colágeno'))) {
-        score += 15;
+      // Rejuvenescimento / Linhas
+      if (skinProfile.concerns.includes('aging')) {
+        if (text.includes('antirrugas') || text.includes('retinal') || text.includes('booster') || text.includes('colageno') || text.includes('led') || text.includes('radiofrequ')) {
+          score += 16;
+        }
       }
-      if (skinProfile.concerns.includes('acne') && (text.includes('acne') || text.includes('cravos') || text.includes('curetas') || text.includes('limpeza'))) {
-        score += 15;
+      // Acne e Poros
+      if (skinProfile.concerns.includes('acne')) {
+        if (text.includes('acne') || text.includes('cravos') || text.includes('curetas') || text.includes('gl-03') || text.includes('limpeza facial')) {
+          score += 15;
+        }
+      }
+      // Hidratação e Viço
+      if (skinProfile.concerns.includes('hydration')) {
+        if (text.includes('hidratante') || text.includes('hialurônico') || text.includes('bepantol') || text.includes('pdrn') || text.includes('centella')) {
+          score += 14;
+        }
       }
     }
 
-    return Math.min(99, Math.max(35, score));
+    // Limites realistas de score
+    return Math.min(99, Math.max(42, score));
   };
 
   const categories = ['all', ...Array.from(new Set(products.map(p => p.category).filter(Boolean)))];
