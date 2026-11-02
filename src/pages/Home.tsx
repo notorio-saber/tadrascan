@@ -69,18 +69,13 @@ export default function Home() {
         <div className="glass-effect rounded-[1.5em] relative z-10 shadow-[0_8px_32px_rgba(0,0,0,0.3)] bg-gradient-to-b from-white/10 to-white/5 border border-white/20 overflow-hidden p-6 sm:p-8">
           
           <h3 className="text-sm font-jakarta text-white font-semibold mb-6 uppercase tracking-widest opacity-90">
-            Ações Rápidas
+            Nova Análise
           </h3>
           
           <div className="flex flex-col gap-3">
             <Link to="/scan" className="w-full flex items-center justify-center gap-3 px-6 py-4 glass-button bg-primary-500/30 border border-primary-500/50 text-white rounded-xl font-medium hover:bg-primary-500/40 transition-all shadow-[0_0_20px_theme(colors.primary.500/25%)] active:scale-[0.98]">
               <Camera className="w-5 h-5" />
               Escanear Embalagem
-            </Link>
-
-            <Link to="/onboarding" className="w-full flex items-center justify-center gap-2 px-6 py-3.5 glass-button bg-white/5 border border-white/15 text-white/80 rounded-xl text-sm font-medium hover:bg-white/10 hover:text-white transition-all">
-              <UserCheck className="w-4 h-4 text-primary-400" />
-              {profile ? 'Refazer Teste de Pele' : 'Fazer Teste de Pele'}
             </Link>
           </div>
 

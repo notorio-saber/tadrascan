@@ -49,7 +49,7 @@ export default function Scan() {
       });
       
       if (!response.ok) {
-        let errMessage = 'Falha ao se comunicar com a IA';
+        let errMessage = 'Muitos scanners estão sendo realizados no momento. Por favor, tente mais uma vez em instantes.';
         try {
           const errData = await response.json();
           if (errData.error) errMessage = errData.error;

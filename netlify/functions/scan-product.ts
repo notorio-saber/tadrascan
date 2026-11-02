@@ -110,9 +110,23 @@ const handler: Handler = async (event, context) => {
 
   } catch (error: any) {
     console.error('Erro no OCR/IA:', error);
+
+    const errorMessage = error?.message || '';
+    const isOverloaded = 
+      errorMessage.includes('503') || 
+      errorMessage.includes('high demand') || 
+      errorMessage.includes('UNAVAILABLE') ||
+      errorMessage.includes('RESOURCE_EXHAUSTED') ||
+      errorMessage.includes('429');
+
+    const userFriendlyMessage = isOverloaded
+      ? 'Muitos scanners estão sendo realizados no momento. Por favor, tente mais uma vez em instantes.'
+      : 'Não foi possível concluir o escaneamento desta foto. Tente enquadrar a lista de ingredientes com boa iluminação e tente novamente.';
+
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: `Falha na Inteligência Artificial: ${error.message}` })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: userFriendlyMessage })
     };
   }
 };

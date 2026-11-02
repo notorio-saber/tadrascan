@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { saveSkinProfile } from '../services/firestore/skinProfiles';
 import type { SkinProfile } from '../types/database';
+import { Sparkles, ArrowRight, Check } from 'lucide-react';
 
 export default function Onboarding() {
   const { currentUser } = useAuth();
@@ -92,7 +93,7 @@ export default function Onboarding() {
         navigate('/app');
       } catch (error) {
         console.error(error);
-        alert('Erro ao salvar perfil.');
+        alert('Erro ao salvar perfil. Tente novamente.');
       } finally {
         setLoading(false);
       }
@@ -100,55 +101,90 @@ export default function Onboarding() {
   };
 
   return (
-    <div className="min-h-screen bg-tadra-bg flex items-center justify-center p-6">
-      <div className="max-w-xl w-full bg-white/80 backdrop-blur p-8 md:p-12 rounded-3xl shadow-sm border border-tadra-wine/5">
+    <div className="min-h-screen flex flex-col justify-center items-center p-4 sm:p-6 pb-28">
+      <div className="w-full max-w-xl relative group">
         
-        <div className="flex justify-between items-center mb-8">
-          <p className="text-sm font-geist font-medium text-tadra-textSoft">Etapa {step + 1} de {questions.length}</p>
-          <div className="flex gap-1">
-            {questions.map((_, i) => (
-              <div key={i} className={`h-1.5 w-8 rounded-full ${i <= step ? 'bg-tadra-wine' : 'bg-tadra-wine/10'}`} />
-            ))}
+        {/* Glow de fundo */}
+        <div className="absolute -inset-1 bg-gradient-to-r from-primary-600/30 via-primary-500/10 to-primary-600/30 rounded-[2.5rem] blur-xl opacity-60"></div>
+
+        <div className="glass-effect rounded-3xl p-6 sm:p-10 bg-gradient-to-b from-white/10 to-white/5 border border-white/15 shadow-[0_12px_40px_rgba(0,0,0,0.4)] relative z-10 flex flex-col">
+          
+          {/* Header da etapa com indicador */}
+          <div className="flex justify-between items-center mb-6">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/10 text-[11px] font-medium text-white/70">
+              <Sparkles className="w-3 h-3 text-primary-400" />
+              Etapa {step + 1} de {questions.length}
+            </div>
+            
+            <div className="flex gap-1.5">
+              {questions.map((_, i) => (
+                <div 
+                  key={i} 
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    i === step 
+                      ? 'w-6 bg-primary-400 shadow-[0_0_8px_theme(colors.primary.400)]' 
+                      : i < step 
+                        ? 'w-3 bg-primary-500/50' 
+                        : 'w-2 bg-white/10'
+                  }`} 
+                />
+              ))}
+            </div>
           </div>
+
+          {/* Título da pergunta */}
+          <h2 className="text-xl sm:text-2xl font-jakarta font-semibold text-white mb-6 leading-snug">
+            {currentQ.title}
+          </h2>
+
+          {/* Opções elegantes no Dark Glass */}
+          <div className="space-y-3 mb-8">
+            {currentQ.options.map((opt, i) => {
+              let isSelected = false;
+              if (currentQ.multiple) {
+                isSelected = (answers.concerns || []).includes(opt.val as string);
+              } else {
+                isSelected = (answers as any)[currentQ.field] === opt.val;
+              }
+
+              return (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => handleSelect(opt.val)}
+                  className={`w-full text-left p-4 rounded-2xl border transition-all flex items-center justify-between ${
+                    isSelected 
+                      ? 'border-primary-400 bg-primary-500/20 text-white font-medium shadow-[0_0_20px_theme(colors.primary.500/20%)]' 
+                      : 'border-white/10 bg-white/5 text-white/80 hover:bg-white/10 hover:border-white/20'
+                  }`}
+                >
+                  <span className="text-sm sm:text-base font-inter">{opt.label}</span>
+                  <div className={`w-5 h-5 rounded-full flex items-center justify-center border transition-all ${
+                    isSelected 
+                      ? 'border-primary-400 bg-primary-500 text-white' 
+                      : 'border-white/20 bg-white/5'
+                  }`}>
+                    {isSelected && <Check className="w-3 h-3" />}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Botão de Próximo / Salvar */}
+          <button 
+            type="button"
+            onClick={handleNext}
+            disabled={loading}
+            className="w-full py-4 glass-button bg-primary-500/30 border border-primary-500/50 hover:bg-primary-500/40 text-white font-medium rounded-2xl flex items-center justify-center gap-2 shadow-[0_0_25px_theme(colors.primary.500/30%)] transition-all active:scale-[0.98] disabled:opacity-50"
+          >
+            <span className="font-semibold text-sm">
+              {step === questions.length - 1 ? (loading ? 'Salvando perfil...' : 'Finalizar e Ativar IA') : 'Continuar'}
+            </span>
+            <ArrowRight className="w-4 h-4 ml-1 opacity-80" />
+          </button>
+
         </div>
-
-        <h2 className="text-2xl font-playfair font-semibold text-tadra-textStrong mb-6">
-          {currentQ.title}
-        </h2>
-
-        <div className="space-y-3 mb-8">
-          {currentQ.options.map((opt, i) => {
-            let isSelected = false;
-            if (currentQ.multiple) {
-              isSelected = (answers.concerns || []).includes(opt.val as string);
-            } else {
-              isSelected = (answers as any)[currentQ.field] === opt.val;
-            }
-
-            return (
-              <button
-                key={i}
-                onClick={() => handleSelect(opt.val)}
-                className={`w-full text-left p-4 rounded-xl border transition-all ${
-                  isSelected 
-                    ? 'border-tadra-wine bg-tadra-wine/5 text-tadra-wine font-medium shadow-sm' 
-                    : 'border-gray-200 bg-white text-tadra-textStrong hover:border-tadra-wine/30'
-                }`}
-              >
-                {opt.label}
-              </button>
-            )
-          })}
-        </div>
-
-        <button 
-          onClick={handleNext}
-          disabled={loading}
-          className="w-full py-4 bg-tadra-wine text-white rounded-xl font-medium hover:bg-tadra-wine/90 transition-all disabled:opacity-50"
-        >
-          {step === questions.length - 1 ? (loading ? 'Salvando...' : 'Finalizar Perfil') : 'Continuar'}
-        </button>
-
       </div>
     </div>
   );
