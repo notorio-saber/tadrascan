@@ -86,14 +86,14 @@ export default function Onboarding() {
     if (step < questions.length - 1) {
       setStep(step + 1);
     } else {
-      if (!currentUser) return;
       setLoading(true);
       try {
-        await saveSkinProfile(currentUser.uid, answers as Omit<SkinProfile, 'id' | 'userId' | 'updatedAt'>);
+        const userId = currentUser ? currentUser.uid : 'anon_user';
+        await saveSkinProfile(userId, answers as Omit<SkinProfile, 'id' | 'userId' | 'updatedAt'>);
         navigate('/app');
-      } catch (error) {
-        console.error(error);
-        alert('Erro ao salvar perfil. Tente novamente.');
+      } catch (error: any) {
+        console.error("Erro ao salvar perfil:", error);
+        alert(`Erro ao salvar perfil: ${error?.message || 'Tente novamente.'}`);
       } finally {
         setLoading(false);
       }

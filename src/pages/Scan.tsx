@@ -26,12 +26,13 @@ export default function Scan() {
   };
 
   const startAnalysis = async () => {
-    if (!imagePreview || !currentUser) return;
+    if (!imagePreview) return;
     setScanning(true);
     setStatusText('Conectando à Inteligência Artificial...');
 
     try {
-      const profile = await getSkinProfile(currentUser.uid);
+      const userId = currentUser ? currentUser.uid : 'anon_user';
+      let profile = await getSkinProfile(userId);
       if (!profile) {
         navigate('/onboarding');
         return;
@@ -73,7 +74,7 @@ export default function Scan() {
       else classification = 'Atenção';
 
       const result: AnalysisResult = {
-        userId: currentUser.uid,
+        userId: currentUser?.uid || 'anon_user',
         productName: iaResponse.name,
         brand: iaResponse.brand,
         originalInci: iaResponse.ingredients.join(', '),
