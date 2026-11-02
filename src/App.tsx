@@ -41,7 +41,9 @@ function App() {
         </Route>
 
         {/* Rota provisória na raiz */}
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
+          <Route index element={<Home />} />
+        </Route>
       </Routes>
     </Router>
   );

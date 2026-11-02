@@ -3,42 +3,49 @@ import { Link } from 'react-router-dom';
 import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '../services/firebase';
 import { useAuth } from '../contexts/AuthContext';
-import type { AnalysisResult } from '../types/database';
-import { History, LogOut, ChevronRight } from 'lucide-react';
+import { getSkinProfile } from '../services/firestore/skinProfiles';
+import type { AnalysisResult, SkinProfile } from '../types/database';
+import { History, LogOut, ChevronRight, UserCheck, Sparkles } from 'lucide-react';
 import { signOut } from 'firebase/auth';
 import { auth } from '../services/firebase';
 
 export default function Profile() {
   const { currentUser } = useAuth();
   const [history, setHistory] = useState<AnalysisResult[]>([]);
+  const [skinProfile, setSkinProfile] = useState<SkinProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchHistory = async () => {
+    const fetchUserData = async () => {
       if (!currentUser) return;
       
       try {
-        const q = query(
-          collection(db, 'analyses'),
-          where('userId', '==', currentUser.uid),
-          orderBy('createdAt', 'desc')
-        );
-        const snapshot = await getDocs(q);
+        const [qSnapshot, profile] = await Promise.all([
+          getDocs(
+            query(
+              collection(db, 'analyses'),
+              where('userId', '==', currentUser.uid),
+              orderBy('createdAt', 'desc')
+            )
+          ),
+          getSkinProfile(currentUser.uid)
+        ]);
         
         const results: AnalysisResult[] = [];
-        snapshot.forEach((doc) => {
+        qSnapshot.forEach((doc) => {
           results.push({ id: doc.id, ...doc.data() } as AnalysisResult);
         });
         
         setHistory(results);
+        setSkinProfile(profile);
       } catch (error) {
-        console.error("Erro ao buscar histórico:", error);
+        console.error("Erro ao buscar dados do perfil:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchHistory();
+    fetchUserData();
   }, [currentUser]);
 
   const handleLogout = async () => {
@@ -69,6 +76,52 @@ export default function Profile() {
         >
           <LogOut className="w-4 h-4" />
         </button>
+      </div>
+
+      {/* Cartão de Perfil de Pele / Quiz */}
+      <div className="mb-8">
+        <div className="glass-effect bg-white/5 border border-white/10 rounded-3xl p-6 relative overflow-hidden">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-primary-500/20 text-primary-400 flex items-center justify-center border border-primary-500/30">
+                <UserCheck className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-lg font-jakarta font-semibold text-white">Tipo de Pele & Objetivos</h3>
+                <p className="text-xs text-white/50 font-inter">Diagnóstico usado para calibrar os scores</p>
+              </div>
+            </div>
+            <Link 
+              to="/onboarding" 
+              className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-primary-500/20 border border-primary-500/40 text-primary-300 hover:bg-primary-500/30 transition-all flex items-center gap-1"
+            >
+              <Sparkles className="w-3 h-3" />
+              {skinProfile ? 'Refazer Teste' : 'Fazer Teste'}
+            </Link>
+          </div>
+
+          {skinProfile ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-4 text-xs">
+              <div className="bg-white/5 rounded-xl p-3 border border-white/5">
+                <span className="text-white/40 block mb-1">Tipo de Pele</span>
+                <span className="text-white font-medium capitalize">{skinProfile.skinType || 'Não definido'}</span>
+              </div>
+              <div className="bg-white/5 rounded-xl p-3 border border-white/5">
+                <span className="text-white/40 block mb-1">Fototipo</span>
+                <span className="text-white font-medium">Fototipo {skinProfile.phototype || '-'}</span>
+              </div>
+              <div className="bg-white/5 rounded-xl p-3 border border-white/5 col-span-2 sm:col-span-1">
+                <span className="text-white/40 block mb-1">Sensibilidade</span>
+                <span className="text-white font-medium capitalize">{skinProfile.sensitivity === 'yes' ? 'Alta' : skinProfile.sensitivity === 'sometimes' ? 'Moderada' : 'Normal'}</span>
+              </div>
+            </div>
+          ) : (
+            <div className="p-4 rounded-2xl bg-primary-500/10 border border-primary-500/20 flex items-center justify-between mt-2">
+              <p className="text-xs text-white/70">Você ainda não completou o teste de tipo de pele.</p>
+              <Link to="/onboarding" className="text-xs font-semibold text-primary-400 hover:underline">Iniciar agora</Link>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="mb-6 flex items-center gap-3">

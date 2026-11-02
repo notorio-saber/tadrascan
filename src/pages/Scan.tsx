@@ -126,11 +126,11 @@ export default function Scan() {
   );
 
   return (
-    <div className="p-6 md:p-12 max-w-xl mx-auto w-full flex flex-col items-center pb-24 mt-4">
-      <h2 className="text-3xl font-jakarta font-semibold text-white mb-2 text-center">
+    <div className="p-4 sm:p-6 md:p-12 max-w-xl mx-auto w-full flex flex-col items-center">
+      <h2 className="text-2xl sm:text-3xl font-jakarta font-semibold text-white mb-2 text-center">
         Scanner <span className="gradient-text bg-gradient-to-r from-primary-400 to-primary-600">IA</span>
       </h2>
-      <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-8 text-center text-sm text-white/70 shadow-sm backdrop-blur-md">
+      <div className="bg-white/5 border border-white/10 rounded-xl p-3 sm:p-4 mb-6 text-center text-xs sm:text-sm text-white/70 shadow-sm backdrop-blur-md">
         <p className="font-medium text-primary-400 mb-1">Precisão Máxima:</p>
         <p>Fotografe a <b>lista de ingredientes</b> no verso da embalagem. Ou a frente clara do frasco para a IA buscar na web.</p>
       </div>
@@ -143,7 +143,7 @@ export default function Scan() {
           
           {/* Preview da Câmera / Imagem */}
           <div 
-            className="w-full aspect-[3/4] bg-darkGray-100/30 rounded-2xl border border-white/10 flex flex-col items-center justify-center overflow-hidden relative mb-6 shadow-inner"
+            className="w-full aspect-[4/3] sm:aspect-[3/4] max-h-[46vh] bg-darkGray-100/30 rounded-2xl border border-white/10 flex flex-col items-center justify-center overflow-hidden relative mb-5 shadow-inner"
           >
             {imagePreview ? (
               <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />

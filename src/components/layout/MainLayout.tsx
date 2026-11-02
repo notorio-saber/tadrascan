@@ -6,37 +6,36 @@ export default function MainLayout() {
   const currentPath = location.pathname;
 
   return (
-    <div className="min-h-screen flex flex-col relative overflow-x-hidden bg-transparent">
+    <div className="min-h-screen flex flex-col relative overflow-x-hidden bg-transparent pt-[env(safe-area-inset-top,1rem)]">
       {/* Animated Background Blobs */}
       <div className="fixed inset-0 pointer-events-none -z-10">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-500/20 rounded-full blur-[100px]"></div>
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-500/10 rounded-full blur-[100px]"></div>
       </div>
 
-      {/* Removed Header as per user request */}
-      
-      <main className="flex-1 flex flex-col pb-28 md:pb-8">
+      <main className="flex-1 flex flex-col pb-36 md:pb-8">
         <Outlet />
       </main>
 
       {/* Floating Bottom Navigation Bar (Mobile) - Glassmorphism */}
-      <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[95%] max-w-sm glass-effect bg-white/5 rounded-3xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)] p-2 grid grid-cols-4 items-center z-50 md:hidden">
+      <nav className="fixed bottom-[max(1.5rem,env(safe-area-inset-bottom,1.5rem))] left-1/2 -translate-x-1/2 w-[92%] max-w-sm glass-effect bg-white/5 rounded-3xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)] p-2 grid grid-cols-4 items-center z-50 md:hidden">
         
         <Link to="/app" className={`flex flex-col items-center justify-center p-2 rounded-2xl transition-all ${currentPath === '/app' ? 'text-primary-400 bg-primary-500/10' : 'text-white/40 hover:text-white/70'}`}>
           <Home className={`w-5 h-5 mb-1 ${currentPath === '/app' ? 'fill-primary-500/20' : ''}`} />
           <span className="text-[10px] font-medium font-inter">Início</span>
         </Link>
 
+        {/* Scan Button centralizado e alinhado no fluxo */}
+        <Link to="/scan" className="flex flex-col items-center justify-center">
+          <div className={`w-11 h-11 rounded-2xl flex items-center justify-center transition-all ${currentPath === '/scan' ? 'bg-primary-500 text-white shadow-[0_0_15px_theme(colors.primary.500/60%)]' : 'bg-primary-500/20 text-primary-400 border border-primary-500/30 hover:bg-primary-500/30'}`}>
+            <ScanLine className="w-5 h-5" />
+          </div>
+          <span className="text-[10px] font-medium font-inter mt-1 text-primary-400">Scan</span>
+        </Link>
+
         <Link to="/store" className={`flex flex-col items-center justify-center p-2 rounded-2xl transition-all ${currentPath === '/store' ? 'text-primary-400 bg-primary-500/10' : 'text-white/40 hover:text-white/70'}`}>
           <ShoppingBag className={`w-5 h-5 mb-1 ${currentPath === '/store' ? 'fill-primary-500/20' : ''}`} />
           <span className="text-[10px] font-medium font-inter">Loja</span>
-        </Link>
-
-        {/* Center Scan Button with Glow */}
-        <Link to="/scan" className="relative -top-6 flex flex-col items-center justify-center mx-auto">
-          <div className="w-14 h-14 rounded-full bg-primary-500 flex items-center justify-center glow border border-primary-400/50 text-white hover:scale-105 transition-transform active:scale-95 shadow-[0_0_20px_theme('colors.primary.500'/60%)]">
-            <ScanLine className="w-6 h-6" />
-          </div>
         </Link>
 
         <Link to="/profile" className={`flex flex-col items-center justify-center p-2 rounded-2xl transition-all ${currentPath === '/profile' ? 'text-primary-400 bg-primary-500/10' : 'text-white/40 hover:text-white/70'}`}>
