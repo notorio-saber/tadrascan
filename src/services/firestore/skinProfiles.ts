@@ -3,7 +3,7 @@ import { db } from '../firebase';
 import type { SkinProfile } from '../../types/database';
 
 const COLLECTION_NAME = 'skinProfiles';
-const LOCAL_STORAGE_KEY = 'tadra_local_skin_profile';
+const GLOBAL_LOCAL_KEY = 'tadra_active_skin_profile';
 
 export async function saveSkinProfile(userId: string, profile: Omit<SkinProfile, 'id' | 'userId' | 'updatedAt'>): Promise<void> {
   const profileData: SkinProfile = {
@@ -12,47 +12,57 @@ export async function saveSkinProfile(userId: string, profile: Omit<SkinProfile,
     updatedAt: new Date().toISOString()
   };
 
-  // 1. Sempre salva no localStorage como fallback imediato e à prova de falhas de conexão/regras
+  // 1. Sempre salva no localStorage (chave global e chave com userId)
   try {
-    localStorage.setItem(`${LOCAL_STORAGE_KEY}_${userId}`, JSON.stringify(profileData));
+    const serialized = JSON.stringify(profileData);
+    localStorage.setItem(GLOBAL_LOCAL_KEY, serialized);
+    if (userId) {
+      localStorage.setItem(`${GLOBAL_LOCAL_KEY}_${userId}`, serialized);
+    }
   } catch (e) {
     console.warn("Não foi possível salvar localmente:", e);
   }
 
   // 2. Tenta persistir no Firestore
-  try {
-    const docRef = doc(db, COLLECTION_NAME, userId);
-    await setDoc(docRef, profileData);
-  } catch (firestoreError) {
-    console.error("Erro ao salvar no Firestore (mantendo cópia local segura):", firestoreError);
+  if (userId && userId !== 'anon_user') {
+    try {
+      const docRef = doc(db, COLLECTION_NAME, userId);
+      await setDoc(docRef, profileData);
+    } catch (firestoreError) {
+      console.warn("Firestore saveSkinProfile falhou (usando persistência local):", firestoreError);
+    }
   }
 }
 
-export async function getSkinProfile(userId: string): Promise<SkinProfile | null> {
-  // 1. Tenta buscar do Firestore
+export async function getSkinProfile(userId?: string): Promise<SkinProfile | null> {
+  // 1. Tenta recuperar do cache local imediato
   try {
-    const docRef = doc(db, COLLECTION_NAME, userId);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      const data = { id: docSnap.id, ...docSnap.data() } as SkinProfile;
-      // Atualiza o cache local
-      try {
-        localStorage.setItem(`${LOCAL_STORAGE_KEY}_${userId}`, JSON.stringify(data));
-      } catch (e) {}
-      return data;
+    if (userId && userId !== 'anon_user') {
+      const localWithId = localStorage.getItem(`${GLOBAL_LOCAL_KEY}_${userId}`);
+      if (localWithId) return JSON.parse(localWithId) as SkinProfile;
     }
-  } catch (firestoreError) {
-    console.warn("Erro ao buscar do Firestore, tentando fallback local:", firestoreError);
+    const globalLocal = localStorage.getItem(GLOBAL_LOCAL_KEY);
+    if (globalLocal) return JSON.parse(globalLocal) as SkinProfile;
+  } catch (e) {
+    console.error("Erro ao ler perfil do localStorage:", e);
   }
 
-  // 2. Se falhar ou não encontrar no Firestore, recupera do localStorage
-  try {
-    const localData = localStorage.getItem(`${LOCAL_STORAGE_KEY}_${userId}`);
-    if (localData) {
-      return JSON.parse(localData) as SkinProfile;
+  // 2. Se não achou local, tenta buscar do Firestore
+  if (userId && userId !== 'anon_user') {
+    try {
+      const docRef = doc(db, COLLECTION_NAME, userId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = { id: docSnap.id, ...docSnap.data() } as SkinProfile;
+        try {
+          localStorage.setItem(GLOBAL_LOCAL_KEY, JSON.stringify(data));
+          localStorage.setItem(`${GLOBAL_LOCAL_KEY}_${userId}`, JSON.stringify(data));
+        } catch (e) {}
+        return data;
+      }
+    } catch (firestoreError) {
+      console.warn("Erro ao buscar do Firestore:", firestoreError);
     }
-  } catch (e) {
-    console.error("Erro ao ler do localStorage:", e);
   }
 
   return null;

@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
-import { db } from '../services/firebase';
 import { useAuth } from '../contexts/AuthContext';
 import { getSkinProfile } from '../services/firestore/skinProfiles';
+import { getUserAnalyses } from '../services/firestore/analyses';
 import type { AnalysisResult, SkinProfile } from '../types/database';
 import { History, LogOut, ChevronRight, UserCheck, Sparkles } from 'lucide-react';
 import { signOut } from 'firebase/auth';
@@ -17,26 +16,13 @@ export default function Profile() {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      if (!currentUser) return;
-      
       try {
-        const [qSnapshot, profile] = await Promise.all([
-          getDocs(
-            query(
-              collection(db, 'analyses'),
-              where('userId', '==', currentUser.uid),
-              orderBy('createdAt', 'desc')
-            )
-          ),
-          getSkinProfile(currentUser.uid)
+        const [analyses, profile] = await Promise.all([
+          getUserAnalyses(currentUser?.uid),
+          getSkinProfile(currentUser?.uid)
         ]);
         
-        const results: AnalysisResult[] = [];
-        qSnapshot.forEach((doc) => {
-          results.push({ id: doc.id, ...doc.data() } as AnalysisResult);
-        });
-        
-        setHistory(results);
+        setHistory(analyses);
         setSkinProfile(profile);
       } catch (error) {
         console.error("Erro ao buscar dados do perfil:", error);
